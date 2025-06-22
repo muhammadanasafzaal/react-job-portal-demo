@@ -118,7 +118,6 @@ VITE_ENABLE_ANALYTICS=
 
 This project uses a custom design system built on top of Tailwind CSS and shadcn/ui:
 
-- **Primary Color**: `#0154aa`
 - **Typography**: Neue Haas Grotesk Display Pro (with fallbacks)
 - **Components**: Fully accessible, customizable UI components
 - **Responsive**: Mobile-first design approach
