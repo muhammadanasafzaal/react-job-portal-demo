@@ -24,13 +24,13 @@ export default function ProfilePage() {
                     <CardTitle className="text-2xl flex">
                       {user.name}
                     </CardTitle>
-                    <p className="text-lg text-gray-600">{user.title}</p>
+                    <p className="sm:text-lg text-md sm:pr-0 pr-8 text-gray-600">{user.title}</p>
                     <div className="flex items-center space-x-4 mt-2 text-sm text-gray-500">
-                      <div className="flex items-center">
+                      <div className="flex items-center sm:mb-0 mb-1">
                         <MapPin className="w-4 h-4 mr-1" />
                         {user.location}
                       </div>
-                      <div className="flex items-center">
+                      <div className="flex items-center sm:!ml-4 !ml-0">
                         <Mail className="w-4 h-4 mr-1" />
                         {user.email}
                       </div>

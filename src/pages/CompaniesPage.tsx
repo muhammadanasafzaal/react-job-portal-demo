@@ -102,11 +102,11 @@ export default function CompaniesPage() {
                 <Badge variant="secondary" className="bg-blue-100 text-blue-800">
                   {company.openJobs} open jobs
                 </Badge>
-                <div className="space-x-2">
-                  <Button variant="outline" size="sm">
+                <div className="space-x-2 sm:ml-0 ml-2">
+                  <Button variant="outline" size="sm" className="sm:mb-0 mb-2">
                     View Company
                   </Button>
-                  <Button size="sm">View Jobs</Button>
+                  <Button size="sm" className="sm:!ml-2 !ml-0">View Jobs</Button>
                 </div>
               </div>
             </CardContent>

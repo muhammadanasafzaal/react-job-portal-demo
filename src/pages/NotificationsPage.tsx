@@ -177,12 +177,12 @@ export default function NotificationsPage() {
   return (
     <div className="max-w-4xl mx-auto p-6">
       <div className="mb-8">
-        <div className="flex items-center justify-between">
+        <div className="flex sm:items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">Notifications</h1>
             <p className="text-gray-600">Stay updated with your job search activities</p>
           </div>
-          <div className="flex items-center space-x-2">
+          <div className="flex flex-wrap items-center sm:space-y-0 space-y-1 sm:space-x-2 justify-end">
             {unreadCount > 0 && (
               <Button variant="outline" onClick={handleMarkAllAsRead}>
                 <CheckCheck className="w-4 h-4 mr-2" />
