@@ -53,8 +53,8 @@ A sleek, modern job search application built with React, TypeScript, and Tailwin
 ## 📁 Project Structure
 
 src/
-├── components/          # Reusable UI components
-│   ├── ui/             # shadcn/ui components
+├── components/         # Reusable UI components
+│   ├── ui/             # ui components
 │   ├── layout/         # Layout components (Header, Sidebar)
 │   └── jobs/           # Job-specific components
 ├── pages/              # Page components
