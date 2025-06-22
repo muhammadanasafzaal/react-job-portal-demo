@@ -25,7 +25,7 @@ export default function ProfilePage() {
                       {user.name}
                     </CardTitle>
                     <p className="sm:text-lg text-md sm:pr-0 pr-8 text-gray-600">{user.title}</p>
-                    <div className="flex items-center space-x-4 mt-2 text-sm text-gray-500">
+                    <div className="flex flex-wrap items-center space-x-4 mt-2 text-sm text-gray-500">
                       <div className="flex items-center sm:mb-0 mb-1">
                         <MapPin className="w-4 h-4 mr-1" />
                         {user.location}
@@ -45,19 +45,19 @@ export default function ProfilePage() {
             </CardHeader>
             <CardContent>
               <div className="flex space-x-2 flex-wrap">
-                <Button variant="outline" className="sm:hidden flex items-center sm:mr-2">
+                <Button variant="outline" className="sm:hidden flex items-center mr-2 mb-2">
                   <Edit className="w-4 h-4 mr-2" />
                   Edit Profile
                 </Button>
-                <Button className="sm:mb-0 mb-2">
+                <Button className="sm:mb-0 mb-2 !ml-0">
                   <Download className="w-4 h-4 mr-2" />
                   Download Resume
                 </Button>
-                <Button variant="outline" className="sm:mb-0 mb-2">
+                <Button variant="outline" className="sm:mb-0 mb-2 !ml-0 sm:!ml-2 !mr-2">
                   <Share2 className="w-4 h-4 mr-2" />
                   Share Profile
                 </Button>
-                <Button variant="outline" className="sm:!ml-2 !ml-0 sm:mb-0 mb-2">
+                <Button variant="outline" className="!ml-0 sm:mb-0 mb-2">
                   <ExternalLink className="w-4 h-4 mr-2" />
                   Public Profile
                 </Button>
