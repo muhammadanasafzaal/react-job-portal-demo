@@ -1,7 +1,7 @@
 
 
 import { useTransition } from "react"
-import { Link, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import { MapPin, Clock, Users, Bookmark, BookmarkCheck, Check } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
