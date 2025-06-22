@@ -28,7 +28,7 @@ export default function JobSearch() {
           <Input
             type="text"
             placeholder="Job Title, Company, or Keywords"
-            className="pl-10 border-0 sm:border-r rounded-none w-full text-left placeholder:text-left"
+            className="pl-10 border-0 sm:border-r rounded-none w-full placeholder:-translate-x-7"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
