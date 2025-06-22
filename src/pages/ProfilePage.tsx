@@ -17,7 +17,7 @@ export default function ProfilePage() {
               <div className="flex items-start justify-between">
                 <div className="flex items-center space-x-4">
                   <Avatar className="w-20 h-20">
-                    <AvatarImage src="/placeholder.svg" alt={user.name} />
+                    <AvatarImage src="/user-avatar-2.jpg" alt={user.name} className="object-cover"/>
                     <AvatarFallback className="text-xl">{user.initials}</AvatarFallback>
                   </Avatar>
                   <div>
