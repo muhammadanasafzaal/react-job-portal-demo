@@ -17,8 +17,8 @@ export default function Sidebar() {
       <Card className="mb-2">
         <CardContent className="p-0">
           <div className="text-center">
-            <div className="relative rounded-t-lg mb-6">
-              <img src="/profile-bg.jpg" alt="User Background" className="w-full h-24 object-cover" />
+            <div className="relative rounded-t-md mb-6">
+              <img src="/profile-bg.jpg" alt="User Background" className="w-full h-24 object-cover rounded-t-md" />
               <div className="absolute inline-block top-1/2 left-1/2 -translate-x-1/2">
                 <Avatar className="w-20 h-20 mx-auto border-[3px] border-white">
                   <AvatarImage src="/user-avatar.png" alt={user.name} />
