@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from "@/store/hooks"
 import { loadJobs } from "@/store/slices/jobSlice"
 import JobCard from "./JobCard"
 import { Button } from "@/components/ui/button"
+import { Job } from "@/types"
 
 export default function JobListings() {
   const dispatch = useAppDispatch()
@@ -35,49 +36,42 @@ export default function JobListings() {
   return (
     <div className="space-y-8">
       {/* Featured Jobs */}
-      <section>
-        <div className="flex items-center justify-between mb-2">
-          <h2 className="text-xl font-medium text-gray-900">Featured Jobs</h2>
-          <Button variant="link" className="text-blue-600 underline py-0 mb-2">
-            See Featured Jobs
-          </Button>
-        </div>
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
-          {featuredJobs.map((job) => (
-            <JobCard key={job.id} job={job} />
-          ))}
-        </div>
-      </section>
-
+      <JobSection title="Featured Jobs" jobs={featuredJobs} seeMoreText="See Featured Jobs" />
       {/* Recommended Jobs */}
-      <section>
-        <div className="flex items-center justify-between mb-2">
-          <h2 className="text-xl font-medium text-gray-900">Recommended Jobs</h2>
-          <Button variant="link" className="text-blue-600 underline py-0 mb-2">
-            See Recommended Jobs
-          </Button>
-        </div>
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
-          {recommendedJobs.map((job) => (
-            <JobCard key={job.id} job={job} />
-          ))}
-        </div>
-      </section>
-
+      <JobSection title="Recommended Jobs" jobs={recommendedJobs} seeMoreText="See Recommended Jobs" />
       {/* Latest Jobs */}
-      <section>
-        <div className="flex items-center justify-between mb-2">
-          <h2 className="text-xl font-medium text-gray-900">Latest Jobs</h2>
-          <Button variant="link" className="text-blue-600 underline py-0 mb-2">
-            See Latest Jobs
-          </Button>
-        </div>
+      <JobSection title="Latest Jobs" jobs={latestJobs} seeMoreText="See Latest Jobs" />
+    </div>
+  )
+}
+
+
+function JobSection({
+  title,
+  jobs,
+  seeMoreText,
+}: {
+  title: string
+  jobs: Job[]
+  seeMoreText: string
+}) {
+  return (
+    <section>
+      <div className="flex items-center justify-between mb-2">
+        <h2 className="text-xl font-medium text-gray-900">{title}</h2>
+        <Button variant="link" className="text-blue-600 underline py-0 mb-2">
+          {seeMoreText}
+        </Button>
+      </div>
+      {jobs.length === 0 ? (
+        <p className="text-sm text-gray-500">No {title.toLowerCase()} available.</p>
+      ) : (
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
-          {latestJobs.map((job) => (
+          {jobs.map((job) => (
             <JobCard key={job.id} job={job} />
           ))}
         </div>
-      </section>
-    </div>
+      )}
+    </section>
   )
 }

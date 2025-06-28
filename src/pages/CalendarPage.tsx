@@ -1,6 +1,6 @@
 
 
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -30,22 +30,24 @@ export default function CalendarPage() {
   const { appliedJobs } = useAppSelector((state) => state.user)
 
   // Generate mock interviews from applied jobs
-  const mockInterviews = appliedJobs.slice(0, 3).map((job, index) => {
-    const interviewDate = new Date()
-    interviewDate.setDate(interviewDate.getDate() + index + 1) // Next few days
+  const mockInterviews = useMemo(() => {
+    return appliedJobs.slice(0, 3).map((job, index) => {
+      const interviewDate = new Date()
+      interviewDate.setDate(interviewDate.getDate() + index + 1)
 
-    return {
-      id: job.id,
-      title: `${job.title} Interview`,
-      company: job.company.name,
-      companyLogo: job.company.logo,
-      date: interviewDate,
-      time: index === 0 ? "2:00 PM" : index === 1 ? "10:00 AM" : "3:30 PM",
-      type: index % 2 === 0 ? "video" : "onsite",
-      status: index === 0 ? "confirmed" : "pending",
-      jobId: job.id,
-    }
-  })
+      return {
+        id: job.id,
+        company: job?.company?.name || "Unknown Company",
+        title: job?.title+' Interview' || "Untitled Role",
+        companyLogo: job?.company?.logo || "/placeholder.svg",
+        date: interviewDate,
+        time: index === 0 ? "2:00 PM" : index === 1 ? "10:00 AM" : "3:30 PM",
+        type: index % 2 === 0 ? "video" : "onsite",
+        status: index === 0 ? "confirmed" : "pending",
+        jobId: job.id,
+      }
+    })
+  }, [appliedJobs])
 
   const getDaysInMonth = (date: Date) => {
     return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate()
@@ -82,14 +84,13 @@ export default function CalendarPage() {
       const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), day)
       const isToday = date.toDateString() === new Date().toDateString()
       const isSelected = date.toDateString() === selectedDate.toDateString()
-      const hasInterview = mockInterviews.some((interview) => interview.date.toDateString() === date.toDateString())
+      const hasInterview = mockInterviews.some((interview) => interview?.date.toDateString() === date.toDateString())
 
       days.push(
         <div
           key={day}
-          className={`h-24 border border-gray-100 p-2 cursor-pointer hover:bg-gray-50 ${
-            isToday ? "bg-blue-50 border-blue-200" : ""
-          } ${isSelected ? "bg-blue-100 border-blue-300" : ""}`}
+          className={`h-24 border border-gray-100 p-2 cursor-pointer hover:bg-gray-50 ${isToday ? "bg-blue-50 border-blue-200" : ""
+            } ${isSelected ? "bg-blue-100 border-blue-300" : ""}`}
           onClick={() => setSelectedDate(date)}
         >
           <div className={`text-sm font-medium ${isToday ? "text-blue-600" : "text-gray-900"}`}>{day}</div>
@@ -106,11 +107,11 @@ export default function CalendarPage() {
   }
 
   const getInterviewsForDate = (date: Date) => {
-    return mockInterviews.filter((interview) => interview.date.toDateString() === date.toDateString())
+    return mockInterviews.filter((interview) => interview?.date.toDateString() === date.toDateString())
   }
 
   const upcomingInterviews = mockInterviews
-    .filter((interview) => interview.date >= new Date())
+    .filter((interview) => interview?.date >= new Date())
     .sort((a, b) => a.date.getTime() - b.date.getTime())
 
   return (
@@ -171,34 +172,34 @@ export default function CalendarPage() {
               <CardContent>
                 <div className="space-y-4">
                   {getInterviewsForDate(selectedDate).map((interview) => (
-                    <div key={interview.id} className="flex items-center space-x-4 p-4 border rounded-lg">
+                    <div key={interview?.id} className="flex items-center space-x-4 p-4 border rounded-lg">
                       <Avatar className="w-10 h-10">
-                        <AvatarImage src={interview.companyLogo || "/placeholder.svg"} alt={interview.company} />
-                        <AvatarFallback>{interview.company.charAt(0)}</AvatarFallback>
+                        <AvatarImage src={interview?.companyLogo || "/placeholder.svg"} alt={interview?.company} />
+                        <AvatarFallback>{interview?.company?.[0] || "?"}</AvatarFallback>
                       </Avatar>
                       <div className="flex-1">
-                        <h4 className="font-semibold">{interview.title}</h4>
-                        <p className="text-sm text-gray-600">{interview.company}</p>
+                        <h4 className="font-semibold">{interview?.title}</h4>
+                        <p className="text-sm text-gray-600">{interview?.company}</p>
                         <div className="flex items-center space-x-4 mt-1 text-sm text-gray-500">
                           <div className="flex items-center">
                             <Clock className="w-4 h-4 mr-1" />
-                            {interview.time}
+                            {interview?.time}
                           </div>
                           <div className="flex items-center">
-                            {interview.type === "video" ? (
+                            {interview?.type === "video" ? (
                               <Video className="w-4 h-4 mr-1" />
                             ) : (
                               <MapPin className="w-4 h-4 mr-1" />
                             )}
-                            {interview.type === "video" ? "Video Call" : "On-site"}
+                            {interview?.type === "video" ? "Video Call" : "On-site"}
                           </div>
                         </div>
                       </div>
                       <Badge
-                        variant={interview.status === "confirmed" ? "default" : "secondary"}
-                        className={interview.status === "confirmed" ? "bg-green-100 text-green-800" : ""}
+                        variant={interview?.status === "confirmed" ? "default" : "secondary"}
+                        className={interview?.status === "confirmed" ? "bg-green-100 text-green-800" : ""}
                       >
-                        {interview.status}
+                        {interview?.status}
                       </Badge>
                     </div>
                   ))}
@@ -223,29 +224,28 @@ export default function CalendarPage() {
               <div className="space-y-4">
                 {upcomingInterviews.length > 0 ? (
                   upcomingInterviews.map((interview) => (
-                    <div key={interview.id} className="p-3 border rounded-lg hover:bg-gray-50">
+                    <div key={interview?.id} className="p-3 border rounded-lg hover:bg-gray-50">
                       <div className="flex items-start space-x-3">
                         <Avatar className="w-8 h-8">
-                          <AvatarImage src={interview.companyLogo || "/placeholder.svg"} alt={interview.company} />
-                          <AvatarFallback>{interview.company.charAt(0)}</AvatarFallback>
+                          <AvatarImage src={interview?.companyLogo || "/placeholder.svg"} alt={interview?.company} />
+                          <AvatarFallback>{interview?.company.charAt(0)}</AvatarFallback>
                         </Avatar>
                         <div className="flex-1 min-w-0">
-                          <h4 className="text-sm font-medium truncate">{interview.title}</h4>
-                          <p className="text-xs text-gray-600">{interview.company}</p>
+                          <h4 className="text-sm font-medium truncate">{interview?.title}</h4>
+                          <p className="text-xs text-gray-600">{interview?.company}</p>
                           <div className="flex items-center text-xs text-gray-500 mt-1">
                             <Clock className="w-3 h-3 mr-1" />
-                            {interview.date.toLocaleDateString()} at {interview.time}
+                            {interview?.date.toLocaleDateString()} at {interview?.time}
                           </div>
                         </div>
                         <Badge
                           variant="outline"
-                          className={`text-xs ${
-                            interview.type === "video"
+                          className={`text-xs ${interview?.type === "video"
                               ? "border-blue-200 text-blue-700"
                               : "border-green-200 text-green-700"
-                          }`}
+                            }`}
                         >
-                          {interview.type === "video" ? "Video" : "On-site"}
+                          {interview?.type === "video" ? "Video" : "On-site"}
                         </Badge>
                       </div>
                     </div>

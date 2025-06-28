@@ -14,7 +14,7 @@ const initialState: JobState = {
   jobs: [],
   loading: false,
   error: null,
-  activeFilters: ["similar"],
+  activeFilters: [],
   searchResults: [],
 }
 

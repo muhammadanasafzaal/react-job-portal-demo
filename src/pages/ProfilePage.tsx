@@ -17,22 +17,22 @@ export default function ProfilePage() {
               <div className="flex items-start justify-between">
                 <div className="flex items-center space-x-4">
                   <Avatar className="w-20 h-20">
-                    <AvatarImage src="/user-avatar-2.jpg" alt={user.name} className="object-cover"/>
-                    <AvatarFallback className="text-xl">{user.initials}</AvatarFallback>
+                    <AvatarImage src="/user-avatar-2.jpg" alt={user?.name} className="object-cover"/>
+                    <AvatarFallback className="text-xl">{user?.initials}</AvatarFallback>
                   </Avatar>
                   <div>
                     <CardTitle className="text-2xl flex">
-                      {user.name}
+                      {user?.name}
                     </CardTitle>
-                    <p className="sm:text-lg text-md sm:pr-0 pr-4 text-gray-600">{user.title}</p>
+                    <p className="sm:text-lg text-md sm:pr-0 pr-4 text-gray-600">{user?.title}</p>
                     <div className="flex flex-wrap items-center space-x-4 mt-2 text-sm text-gray-500">
                       <div className="flex items-center sm:mb-0 mb-1">
                         <MapPin className="w-4 h-4 mr-1" />
-                        {user.location}
+                        {user?.location}
                       </div>
                       <div className="flex items-center sm:!ml-4 !ml-0">
                         <Mail className="w-4 h-4 mr-1" />
-                        {user.email}
+                        {user?.email}
                       </div>
                     </div>
                   </div>

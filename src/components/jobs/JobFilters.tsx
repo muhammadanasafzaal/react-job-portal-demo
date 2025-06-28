@@ -15,11 +15,9 @@ const filterOptions = [
 
 export default function JobFilters() {
   const dispatch = useAppDispatch()
-  const { activeFilters } = useAppSelector((state) => state.jobs) 
+  const activeFilters = useAppSelector((state) => state.jobs?.activeFilters ?? [])
 
   const [activeFilterId, setActiveFilterId] = useState("")
-  // const [location, setLocation] = useState("")
-  // const [jobType, setJobType] = useState("")
   const [isPending, startTransition] = useTransition()
 
   const handleToggleFilter = (filterId: string) => {
@@ -36,14 +34,16 @@ export default function JobFilters() {
   }
 
   useEffect(() => {
-    console.log('ran', activeFilterId, activeFilters)
-    if(activeFilters.includes(activeFilterId)) {
-      const filtered = filterOptions.filter((item) => item.id === activeFilterId)
-      console.log(filtered[0]?.label)
-      handleSearch(filtered[0]?.label || "")
+    const newFilter = activeFilters.find((id) =>
+      filterOptions.some((f) => f.id === id)
+    )
+
+    if (newFilter) {
+      const label = filterOptions.find((f) => f.id === newFilter)?.label || ""
+      handleSearch(label)
     }
   }, [activeFilters])
-  
+
 
   return (
     <div className="flex flex-wrap gap-2 mb-6 items-center">
@@ -55,7 +55,7 @@ export default function JobFilters() {
           className="cursor-pointer hover:bg-blue-100 transition-colors rounded-[5px] py-[7px] px-4 border border-gray-400 font-normal text-xs"
           onClick={() => handleToggleFilter(filter.id)}
         >
-        {isPending ? "Searching..." : filter.label}
+          {isPending ? "Searching..." : filter.label}
         </Badge>
       ))}
     </div>

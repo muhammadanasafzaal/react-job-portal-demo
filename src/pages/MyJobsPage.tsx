@@ -1,6 +1,6 @@
 
 
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -27,29 +27,34 @@ export default function MyJobsPage() {
     interviewDate.setDate(interviewDate.getDate() + index + 1)
 
     return {
-      id: job.id,
-      jobTitle: job.title,
-      company: job.company.name,
-      companyLogo: job.company.logo,
+      id: job?.id,
+      company: job?.company?.name || "Unknown Company",
+      jobTitle: job?.title || "Untitled Role",
+      companyLogo: job?.company?.logo || "/placeholder.svg",
       date: interviewDate.toISOString().split("T")[0],
       time: index === 0 ? "2:00 PM" : index === 1 ? "10:00 AM" : "3:30 PM",
       type: index % 2 === 0 ? "Video Call" : "On-site",
       status: index === 0 ? "Scheduled" : "Confirmed",
-      location: index % 2 === 0 ? "Remote" : job.location,
+      location: index % 2 === 0 ? "Remote" : job?.location,
     }
   })
 
-  const filteredSavedJobs = savedJobs.filter(
-    (job) =>
-      job.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      job.company.name.toLowerCase().includes(searchTerm.toLowerCase()),
-  )
 
-  const filteredAppliedJobs = appliedJobs.filter(
-    (job) =>
-      job.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      job.company.name.toLowerCase().includes(searchTerm.toLowerCase()),
-  )
+  const filteredSavedJobs = useMemo(() => {
+    return savedJobs.filter(
+      (job) =>
+        job?.title?.toLowerCase().includes(searchTerm?.toLowerCase()) ||
+        job?.company?.name?.toLowerCase().includes(searchTerm?.toLowerCase()),
+    )
+  }, [searchTerm, savedJobs])
+
+  const filteredAppliedJobs = useMemo(() => {
+    return appliedJobs.filter(
+      (job) =>
+        job?.title?.toLowerCase().includes(searchTerm?.toLowerCase()) ||
+        job?.company?.name?.toLowerCase().includes(searchTerm?.toLowerCase()),
+    )
+  }, [searchTerm, appliedJobs])
 
   const handleUnsaveJob = (jobId: string) => {
     dispatch(unsaveJob(jobId))
@@ -129,24 +134,24 @@ export default function MyJobsPage() {
 
         <TabsContent value="saved" className="mt-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredSavedJobs.map((job) => (
-              <Card key={job.id} className="hover:shadow-lg transition-shadow">
+            {filteredSavedJobs.map((job, index) => (
+              <Card key={job?.id || index} className="hover:shadow-lg transition-shadow">
                 <CardHeader className="pb-3">
                   <div className="flex items-start justify-between">
                     <div className="flex items-center space-x-3">
                       <Avatar className="w-10 h-10">
-                        <AvatarImage src={job.company.logo || "/placeholder.svg"} alt={job.company.name} />
-                        <AvatarFallback>{job.company.name.charAt(0)}</AvatarFallback>
+                        <AvatarImage src={job?.company?.logo || "/placeholder.svg"} alt={job?.company?.name} />
+                        <AvatarFallback>{job?.company?.name?.charAt(0) || ''}</AvatarFallback>
                       </Avatar>
                       <div>
-                        <CardTitle className="text-lg">{job.title}</CardTitle>
-                        <p className="text-sm text-gray-600">{job.company.name}</p>
+                        <CardTitle className="text-lg">{job?.title}</CardTitle>
+                        <p className="text-sm text-gray-600">{job?.company?.name}</p>
                       </div>
                     </div>
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={() => handleUnsaveJob(job.id)}
+                      onClick={() => handleUnsaveJob(job?.id)}
                       className="text-red-500 hover:text-red-700"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -157,32 +162,32 @@ export default function MyJobsPage() {
                   <div className="space-y-2 mb-4">
                     <div className="flex items-center text-sm text-gray-500">
                       <MapPin className="w-4 h-4 mr-1" />
-                      {job.location}
+                      {job?.location}
                     </div>
                     <div className="flex items-center text-sm text-gray-500">
                       <Clock className="w-4 h-4 mr-1" />
-                      Saved {job.savedAt ? new Date(job.savedAt).toLocaleDateString() : "Recently"}
+                      Saved {job?.savedAt ? new Date(job?.savedAt).toLocaleDateString() : "Recently"}
                     </div>
                     <div className="flex items-center text-sm text-gray-500">
                       <Building2 className="w-4 h-4 mr-1" />
-                      {job.type}
+                      {job?.type}
                     </div>
                   </div>
                   <div className="flex flex-wrap gap-1 mb-4">
-                    {job.skills.slice(0, 3).map((skill) => (
+                    {job?.skills.slice(0, 3).map((skill) => (
                       <Badge key={skill} variant="outline" className="text-xs">
                         {skill}
                       </Badge>
                     ))}
-                    {job.skills.length > 3 && (
+                    {job?.skills.length > 3 && (
                       <Badge variant="outline" className="text-xs">
-                        +{job.skills.length - 3}
+                        +{job?.skills.length - 3}
                       </Badge>
                     )}
                   </div>
                   <div className="flex space-x-2">
                     <Button className="flex-1">Apply Now</Button>
-                    <Link to={`/jobs/${job.id}`}>
+                    <Link to={`/jobs/${job?.id || ""}`}>
                       <Button variant="outline" size="sm">
                         <ExternalLink className="w-4 h-4" />
                       </Button>
@@ -207,43 +212,42 @@ export default function MyJobsPage() {
         <TabsContent value="applied" className="mt-6">
           <div className="space-y-4">
             {filteredAppliedJobs.map((job) => (
-              <Card key={job.id}>
+              <Card key={job?.id}>
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-4">
                       <Avatar className="w-12 h-12">
-                        <AvatarImage src={job.company.logo || "/placeholder.svg"} alt={job.company.name} />
-                        <AvatarFallback>{job.company.name.charAt(0)}</AvatarFallback>
+                        <AvatarImage src={job?.company?.logo || "/placeholder.svg"} alt={job?.company?.name} />
+                        <AvatarFallback>{job?.company?.name.charAt(0)}</AvatarFallback>
                       </Avatar>
                       <div>
-                        <h3 className="text-lg font-semibold">{job.title}</h3>
-                        <p className="text-gray-600">{job.company.name}</p>
+                        <h3 className="text-lg font-semibold">{job?.title}</h3>
+                        <p className="text-gray-600">{job?.company?.name}</p>
                         <div className="flex items-center space-x-4 mt-1 text-sm text-gray-500">
                           <span>
-                            Applied {job.appliedAt ? new Date(job.appliedAt).toLocaleDateString() : "Recently"}
+                            Applied {job?.appliedAt ? new Date(job?.appliedAt).toLocaleDateString() : "Recently"}
                           </span>
                           <span>•</span>
-                          <span>{job.location}</span>
+                          <span>{job?.location}</span>
                           <span>•</span>
-                          <span>{job.salary}</span>
+                          <span>{job?.salary}</span>
                         </div>
                       </div>
                     </div>
                     <div className="text-right">
                       <Badge
                         variant="secondary"
-                        className={`mb-2 ${
-                          job.applicationStatus === "Under Review"
+                        className={`mb-2 ${job?.applicationStatus === "Under Review"
                             ? "bg-yellow-100 text-yellow-800"
-                            : job.applicationStatus === "Interview Scheduled"
+                            : job?.applicationStatus === "Interview Scheduled"
                               ? "bg-green-100 text-green-800"
                               : "bg-gray-100 text-gray-800"
-                        }`}
+                          }`}
                       >
-                        {job.applicationStatus || "Under Review"}
+                        {job?.applicationStatus || "Under Review"}
                       </Badge>
                       <div className="flex space-x-2">
-                        <Link to={`/jobs/${job.id}`}>
+                        <Link to={`/jobs/${job?.id || ""}`}>
                           <Button variant="outline" size="sm">
                             View Job
                           </Button>
@@ -272,44 +276,43 @@ export default function MyJobsPage() {
 
         <TabsContent value="interviews" className="mt-6">
           <div className="space-y-4">
-            {mockInterviews.map((interview) => (
-              <Card key={interview.id}>
+            {mockInterviews.map((interview, index) => (
+              <Card key={interview?.id || index}>
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-4">
                       <Avatar className="w-12 h-12">
-                        <AvatarImage src={interview.companyLogo || "/placeholder.svg"} alt={interview.company} />
-                        <AvatarFallback>{interview.company.charAt(0)}</AvatarFallback>
+                        <AvatarImage src={interview?.companyLogo || "/placeholder.svg"} alt={interview?.company} />
+                        <AvatarFallback>{interview?.company.charAt(0)}</AvatarFallback>
                       </Avatar>
                       <div>
-                        <h3 className="text-lg font-semibold">{interview.jobTitle}</h3>
-                        <p className="text-gray-600">{interview.company}</p>
+                        <h3 className="text-lg font-semibold">{interview?.jobTitle}</h3>
+                        <p className="text-gray-600">{interview?.company}</p>
                         <div className="flex items-center space-x-4 mt-1 text-sm text-gray-500">
                           <div className="flex items-center">
                             <Calendar className="w-4 h-4 mr-1" />
-                            {new Date(interview.date).toLocaleDateString()} at {interview.time}
+                            {new Date(interview?.date).toLocaleDateString()} at {interview?.time}
                           </div>
                           <span>•</span>
-                          <span>{interview.type}</span>
+                          <span>{interview?.type}</span>
                           <span>•</span>
-                          <span>{interview.location}</span>
+                          <span>{interview?.location}</span>
                         </div>
                       </div>
                     </div>
                     <div className="text-right">
                       <Badge
-                        className={`mb-2 ${
-                          interview.status === "Scheduled"
+                        className={`mb-2 ${interview?.status === "Scheduled"
                             ? "bg-blue-100 text-blue-800"
-                            : interview.status === "Confirmed"
+                            : interview?.status === "Confirmed"
                               ? "bg-green-100 text-green-800"
                               : "bg-gray-100 text-gray-800"
-                        }`}
+                          }`}
                       >
-                        {interview.status}
+                        {interview?.status}
                       </Badge>
                       <div className="flex space-x-2">
-                        {interview.type === "Video Call" ? (
+                        {interview?.type === "Video Call" ? (
                           <Button size="sm">Join Call</Button>
                         ) : (
                           <Button variant="outline" size="sm">

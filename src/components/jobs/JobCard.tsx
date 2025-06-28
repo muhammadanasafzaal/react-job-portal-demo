@@ -49,9 +49,9 @@ export default function JobCard({ job }: JobCardProps) {
 
   return (
     <Card className="h-full transition-shadow duration-200 hover:shadow-lg cursor-pointer">
-      <CardContent className="p-4 pb-2" onClick={() => navigate(`/jobs/${job.id}`)}>
+      <CardContent className="p-4 pb-2" onClick={() => job?.id && navigate(`/jobs/${job.id}`)}>
         <div className="flex items-center space-x-2">
-          {job.promoted && (
+          {job?.promoted && (
             <Badge variant="secondary" className="mb-3 text-xs">
               Promoted
             </Badge>
@@ -60,12 +60,12 @@ export default function JobCard({ job }: JobCardProps) {
         <div className="flex items-start justify-between mb-3">
           <div className="flex items-center space-x-3">
             <Avatar className="w-8 h-8 rounded-none">
-              <AvatarImage src={job.company.logo || "/placeholder.svg"} alt={job.company.name} />
-              <AvatarFallback>{job.company.name.charAt(0)}</AvatarFallback>
+              <AvatarImage src={job?.company?.logo || "/placeholder.svg"} alt={job?.company?.name} />
+<AvatarFallback>{job?.company?.name?.charAt(0) ?? "?"}</AvatarFallback>
             </Avatar>
             <div>
-              <h3 className="text-sm font-semibold text-gray-900">{job.title}</h3>
-              <p className="text-xs text-gray-600">{job.company.name}</p>
+              <h3 className="text-sm font-semibold text-gray-900">{job?.title}</h3>
+              <p className="text-xs text-gray-600">{job?.company?.name}</p>
             </div>
           </div>
         </div>
@@ -73,17 +73,17 @@ export default function JobCard({ job }: JobCardProps) {
         <div className="mb-4 space-y-2">
           <div className="flex items-center text-xs text-gray-500">
             <MapPin className="w-3 h-3 mr-1" />
-            {job.location} ({job.type})
+            {job?.location} ({job?.type})
           </div>
           <div className="flex items-center text-xs text-gray-500">
             <div className="flex items-center text-xs text-gray-500">
               <Clock className="w-3 h-3 mr-1" />
-              {job.postedAt} 
+              {job?.postedAt} 
               <span className="mx-2"> | </span>
             </div>
             <div className="flex items-center text-xs text-gray-500">
               <Users className="w-3 h-3 mr-1" />
-              {job.applicants} applicants
+              {job?.applicants} applicants
             </div>
           </div>
         </div>
@@ -95,14 +95,14 @@ export default function JobCard({ job }: JobCardProps) {
         )}
 
         <div className="flex flex-wrap gap-1 mb-2">
-          {job.skills.slice(0, 3).map((skill) => (
+          {job?.skills?.slice(0, 3)?.map((skill) => (
             <Badge key={skill} variant="outline" className="text-xs">
               {skill}
             </Badge>
           ))}
-          {job.skills.length > 3 && (
+          {job?.skills?.length > 3 && (
             <Badge variant="outline" className="text-xs">
-              +{job.skills.length - 3}
+              +{job?.skills?.length - 3}
             </Badge>
           )}
         </div>

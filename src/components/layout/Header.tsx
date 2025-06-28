@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Badge } from "@/components/ui/badge"
 import { useAppSelector } from "@/store/hooks"
+import { User as UserType } from "@/types"
 
 const navigation = [
   { name: "Find Jobs", href: "/", icon: Briefcase },
@@ -29,7 +30,8 @@ const navigation = [
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const location = useLocation()
-  const { user } = useAppSelector((state) => state.user)
+  const user: UserType | null = useAppSelector(state => state.user?.user || null)
+
 
   return (
     <header className="sticky top-0 z-50 bg-white border-b border-gray-200">
@@ -83,8 +85,8 @@ export default function Header() {
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="relative w-8 h-8 rounded-full">
                   <Avatar className="w-8 h-8">
-                    <AvatarImage src="/user-avatar-2.jpg" alt={user.name} />
-                    <AvatarFallback>{user.initials}</AvatarFallback>
+                    <AvatarImage src="/user-avatar-2.jpg" alt={user?.name ?? "User"} />
+                    <AvatarFallback>{user?.initials ?? "JD"}</AvatarFallback>
                   </Avatar>
                 </Button>
               </DropdownMenuTrigger>

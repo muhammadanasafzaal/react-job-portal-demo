@@ -35,12 +35,12 @@ export default function JobDetailPage() {
     )
   }
 
-  const isSaved = savedJobs.some((savedJob) => savedJob.id === job.id)
-  const hasApplied = appliedJobs.some((appliedJob) => appliedJob.id === job.id)
+  const isSaved = savedJobs.some((savedJob) => savedJob.id === job?.id)
+  const hasApplied = appliedJobs.some((appliedJob) => appliedJob.id === job?.id)
 
   const handleSaveJob = () => {
     if (isSaved) {
-      dispatch(unsaveJob(job.id))
+      dispatch(unsaveJob(job?.id))
       toast.success("Job removed from saved jobs")
     } else {
       dispatch(saveJob(job))
@@ -76,24 +76,24 @@ export default function JobDetailPage() {
               <div className="flex items-start justify-between">
                 <div className="flex items-center space-x-4">
                   <Avatar className="w-16 h-16">
-                    <AvatarImage src={job.company.logo || "/placeholder.svg"} alt={job.company.name} />
-                    <AvatarFallback>{job.company.name.charAt(0)}</AvatarFallback>
+                    <AvatarImage src={job?.company?.logo || "/placeholder.svg"} alt={job?.company?.name} />
+                    <AvatarFallback>{job?.company?.name?.charAt(0) || ''}</AvatarFallback>
                   </Avatar>
                   <div>
-                    <CardTitle className="text-2xl">{job.title}</CardTitle>
-                    <p className="text-lg text-gray-600">{job.company.name}</p>
-                    <div className="flex items-center space-x-4 mt-2 text-sm text-gray-500">
-                      <div className="flex items-center">
+                    <CardTitle className="text-2xl">{job?.title}</CardTitle>
+                    <p className="text-lg text-gray-600">{job?.company?.name}</p>
+                    <div className="flex sm:flex-row flex-col sm:items-center sm:space-x-4 mt-2 text-sm text-gray-500">
+                      <div className="flex items-center  sm:mb-0 mb-2">
                         <MapPin className="w-4 h-4 mr-1" />
-                        {job.location}
+                        {job?.location}
                       </div>
-                      <div className="flex items-center">
+                      <div className="flex items-center sm:mb-0 mb-2">
                         <Clock className="w-4 h-4 mr-1" />
-                        {job.postedAt}
+                        {job?.postedAt}
                       </div>
-                      <div className="flex items-center">
+                      <div className="flex items-center sm:mb-0 mb-2">
                         <Users className="w-4 h-4 mr-1" />
-                        {job.applicants} applicants
+                        {job?.applicants} applicants
                       </div>
                     </div>
                   </div>
@@ -117,7 +117,7 @@ export default function JobDetailPage() {
                 <h3 className="text-lg font-semibold mb-3">Job Description</h3>
                 <div className="prose prose-sm max-w-none">
                   <p>
-                    We are looking for a talented {job.title} to join our growing team. You will be responsible for
+                    We are looking for a talented {job?.title} to join our growing team. You will be responsible for
                     designing and implementing user interfaces that are both beautiful and functional.
                   </p>
 
@@ -146,7 +146,7 @@ export default function JobDetailPage() {
               <div>
                 <h3 className="text-lg font-semibold mb-3">Required Skills</h3>
                 <div className="flex flex-wrap gap-2">
-                  {job.skills.map((skill) => (
+                  {job?.skills.map((skill) => (
                     <Badge key={skill} variant="secondary">
                       {skill}
                     </Badge>
@@ -157,9 +157,9 @@ export default function JobDetailPage() {
               <Separator />
 
               <div>
-                <h3 className="text-lg font-semibold mb-3">About {job.company.name}</h3>
+                <h3 className="text-lg font-semibold mb-3">About {job?.company?.name}</h3>
                 <p className="text-gray-600">
-                  {job.company.name} is a leading technology company focused on creating innovative solutions that make
+                  {job?.company?.name} is a leading technology company focused on creating innovative solutions that make
                   a difference in people's lives. We believe in fostering a collaborative and inclusive work environment
                   where everyone can thrive.
                 </p>
@@ -207,21 +207,21 @@ export default function JobDetailPage() {
                   <Building2 className="w-4 h-4 mr-2 text-gray-400" />
                   <span className="text-sm">Job Type</span>
                 </div>
-                <Badge variant="secondary">{job.type}</Badge>
+                <Badge variant="secondary">{job?.type}</Badge>
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
                   <DollarSign className="w-4 h-4 mr-2 text-gray-400" />
                   <span className="text-sm">Salary</span>
                 </div>
-                <span className="text-sm font-medium">{job.salary}</span>
+                <span className="text-sm font-medium">{job?.salary}</span>
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
                   <Users className="w-4 h-4 mr-2 text-gray-400" />
                   <span className="text-sm">Experience</span>
                 </div>
-                <span className="text-sm font-medium">{job.experience}</span>
+                <span className="text-sm font-medium">{job?.experience}</span>
               </div>
             </CardContent>
           </Card>
