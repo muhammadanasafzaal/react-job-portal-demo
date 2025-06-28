@@ -1,63 +1,74 @@
-
-
+import { useState, useEffect, useTransition, useRef } from "react"
 import { Badge } from "@/components/ui/badge"
 import { useAppDispatch, useAppSelector } from "@/store/hooks"
 import { searchJobs, toggleFilter } from "@/store/slices/jobSlice"
-import { useEffect, useState, useTransition } from "react"
 
 const filterOptions = [
-  { id: "frontend", label: "Frontend", active: false },
-  { id: "backend", label: "Backend", active: false },
-  { id: "graphic-designer", label: "Graphic Designer", active: false },
-  { id: "full-stack", label: "Full Stack", active: false },
-  { id: "mobile", label: "Mobile", active: false },
+  { id: "frontend", label: "Frontend" },
+  { id: "backend", label: "Backend" },
+  { id: "graphic-designer", label: "Graphic Designer" },
+  { id: "full-stack", label: "Full Stack" },
+  { id: "mobile", label: "Mobile" },
 ]
 
 export default function JobFilters() {
   const dispatch = useAppDispatch()
   const activeFilters = useAppSelector((state) => state.jobs?.activeFilters ?? [])
 
-  const [activeFilterId, setActiveFilterId] = useState("")
-  const [isPending, startTransition] = useTransition()
+  const [loadingFilterId, setLoadingFilterId] = useState<string | null>(null)
+  const [, startTransition] = useTransition()
+  const lastSearchTermRef = useRef("")
 
   const handleToggleFilter = (filterId: string) => {
     dispatch(toggleFilter(filterId))
-    setActiveFilterId(filterId)
-  }
-
-  const handleSearch = (searchTerm: string) => {
-    const location = ''
-    const jobType = ''
+    const label = filterOptions.find((f) => f.id === filterId)?.label || ""
+    setLoadingFilterId(filterId)
     startTransition(() => {
-      dispatch(searchJobs({ searchTerm, location, jobType }))
+      dispatch(searchJobs({ searchTerm: label, location: "", jobType: "" }))
+      setLoadingFilterId(null)
     })
   }
 
+  const handleClearAll = () => {
+    activeFilters.forEach((id) => dispatch(toggleFilter(id)))
+  }
+
   useEffect(() => {
-    const newFilter = activeFilters.find((id) =>
-      filterOptions.some((f) => f.id === id)
-    )
-
-    if (newFilter) {
-      const label = filterOptions.find((f) => f.id === newFilter)?.label || ""
-      handleSearch(label)
+    const latestActiveId = activeFilters[activeFilters.length - 1]
+    const matched = filterOptions.find((f) => f.id === latestActiveId)
+    if (matched && matched.label !== lastSearchTermRef.current) {
+      lastSearchTermRef.current = matched.label
+      startTransition(() => {
+        dispatch(searchJobs({ searchTerm: matched.label, location: "", jobType: "" }))
+      })
     }
-  }, [activeFilters])
-
+  }, [activeFilters, dispatch])
 
   return (
     <div className="flex flex-wrap gap-2 mb-6 items-center">
-      Similar:
-      {filterOptions.map((filter) => (
-        <Badge
-          key={filter.id}
-          variant={activeFilters.includes(filter.id) ? "default" : "secondary"}
-          className="cursor-pointer hover:bg-blue-100 transition-colors rounded-[5px] py-[7px] px-4 border border-gray-400 font-normal text-xs"
-          onClick={() => handleToggleFilter(filter.id)}
+      <span className="text-sm font-medium text-gray-600 mr-2">Similar:</span>
+      {filterOptions.map((filter) => {
+        const isActive = activeFilters.includes(filter.id)
+        const isLoading = loadingFilterId === filter.id
+        return (
+          <Badge
+            key={filter.id}
+            variant={isActive ? "default" : "secondary"}
+            className="cursor-pointer hover:bg-blue-100 transition-colors rounded-[5px] py-[7px] px-4 border border-gray-400 font-normal text-xs"
+            onClick={() => handleToggleFilter(filter.id)}
+          >
+            {isLoading ? "Searching..." : filter.label}
+          </Badge>
+        )
+      })}
+      {activeFilters.length > 0 && (
+        <button
+          onClick={handleClearAll}
+          className="ml-4 text-xs text-blue-600 underline hover:text-blue-800 transition-colors"
         >
-          {isPending ? "Searching..." : filter.label}
-        </Badge>
-      ))}
+          Clear all
+        </button>
+      )}
     </div>
   )
 }
