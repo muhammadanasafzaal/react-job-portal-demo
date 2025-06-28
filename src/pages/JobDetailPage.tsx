@@ -74,7 +74,7 @@ export default function JobDetailPage() {
           <Card>
             <CardHeader>
               <div className="flex items-start justify-between">
-                <div className="flex items-center w-1/2 space-x-4 sm:w-auto">
+                <div className="flex items-center space-x-4 sm:w-auto">
                   <Avatar className="w-10 h-10 rounded-none sm:w-16 sm:h-16">
                     <AvatarImage src={job?.company?.logo || "/placeholder.svg"} alt={job?.company?.name} className="object-cover"/>
                     <AvatarFallback>{job?.company?.name.charAt(0)}</AvatarFallback>
@@ -82,16 +82,16 @@ export default function JobDetailPage() {
                   <div>
                     <CardTitle className="text-lg sm:text-2xl">{job.title}</CardTitle>
                     <p className="text-lg text-gray-600">{job?.company?.name}</p>
-                    <div className="flex items-center mt-2 space-x-4 text-sm text-gray-500">
-                      <div className="flex items-center">
+                    <div className="flex sm:flex-row flex-col sm:items-center mt-2 sm:space-x-4 text-sm text-gray-500">
+                      <div className="flex items-center sm:mb-0 mb-2">
                         <MapPin className="w-4 h-4 mr-1" />
                         {job?.location}
                       </div>
-                      <div className="flex items-center sm:mb-0 mb-2">
+                      <div className="flex items-center sm:ml-2 ml-0 sm:mb-0 mb-2">
                         <Clock className="w-4 h-4 mr-1" />
                         {job?.postedAt}
                       </div>
-                      <div className="flex items-center sm:mb-0 mb-2">
+                      <div className="flex items-center sm:ml-2 ml-0">
                         <Users className="w-4 h-4 mr-1" />
                         {job?.applicants} applicants
                       </div>
